@@ -1,0 +1,627 @@
+{
+  "name": "Smart Expense Tracker",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -640,
+        128
+      ],
+      "id": "6a1b1984-020a-45f8-9096-99e7898eb33c",
+      "name": "Telegram Trigger",
+      "webhookId": "b928f324-a690-42bc-9387-128971b189f4",
+      "credentials": {
+        "telegramApi": {
+          "id": "1BjVVaOQpBtK1mTs",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZJT9uBQN6Gji1UoPd_15yVAwl6qMM51F3YGrAWD73gI",
+          "mode": "list",
+          "cachedResultName": "سجلات المشروع",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZJT9uBQN6Gji1UoPd_15yVAwl6qMM51F3YGrAWD73gI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZJT9uBQN6Gji1UoPd_15yVAwl6qMM51F3YGrAWD73gI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "الرسالة الأصلية": "={{ $('Telegram Trigger').item.json.message.text }}",
+            "العملية": "={{ $json.type }}{{ $json.output.type }}",
+            "الكمية أو المبلغ": "={{ $json.amount }}{{ $json.output.amount }}",
+            "التاريخ": "={{ $json.date }}{{ $json.output.data }}",
+            "الوقت": "={{ $json.time }}{{ $json.output.time }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "العملية",
+              "displayName": "العملية",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "الكمية أو المبلغ",
+              "displayName": "الكمية أو المبلغ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "التاريخ",
+              "displayName": "التاريخ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "الوقت",
+              "displayName": "الوقت",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "الرسالة الأصلية",
+              "displayName": "الرسالة الأصلية",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        736,
+        128
+      ],
+      "id": "64702406-6e9f-4cea-991f-d8535e1e639a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "KHf8gIzuCGqPRXEL",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.text ? 'text' : ($json.message.photo ? 'photo' : ($json.message.voice ? 'voice' : 'other')) }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "55b779f4-3d5e-42ea-8e43-898ed38a91b4"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "14a5b306-c7f7-43fa-bbb3-5c242fda3422",
+                    "leftValue": "={{ $json.message.text ? 'text' : ($json.message.photo ? 'photo' : ($json.message.voice ? 'voice' : 'other')) }}",
+                    "rightValue": "photo",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "40932d2c-70f0-479c-9eab-9a2fe6aa7eb0",
+                    "leftValue": "={{ $json.message.text ? 'text' : ($json.message.photo ? 'photo' : ($json.message.voice ? 'voice' : 'other')) }}",
+                    "rightValue": "voice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -416,
+        112
+      ],
+      "id": "13fbd434-7109-4f40-a5ed-284b72de1f6e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "={{ $('Telegram Trigger').item.json.message.text }}"
+            },
+            {
+              "content": "=You are a financial transaction extraction engine.\n\nYour task is to analyze the user's message and extract ALL real financial transactions mentioned.\n\nCRITICAL RULES:\n- One message may contain MULTIPLE transactions.\n- Each transaction MUST be extracted as a separate row.\n- Return ONLY valid JSON.\n- NEVER return text, explanations, or markdown.\n\nOUTPUT FORMAT (MANDATORY):\n{\n  \"ignore\": false,\n  \"rows\": [\n    {\n      \"amount\": number,\n      \"type\": \"short category\",\n      \"date\": \"YYYY-MM-DD\",\n      \"time\": \"HH:MM or unknown\"\n    }\n  ]\n}\n\nDECISION LOGIC:\n- If NO real financial transactions exist → return EXACTLY:\n{\"ignore\": true}\n\nEXTRACTION RULES:\n- Extract numeric amounts explicitly mentioned.\n- Convert words like \"ألف ونص\" → 1500\n- If relative date like \"امبارح\" → calculate actual date.\n- If time not mentioned → use \"unknown\"\n- Categories must be generic (transport, food, gift, shopping, bill)\n\nFAIL CONDITIONS:\n- If amounts are missing or unclear → ignore true",
+              "role": "model"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        -176
+      ],
+      "id": "4f234ab6-ba08-4822-8fb8-d7d285d66293",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "PZL4rqgD4eyXI5Gw",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const response = $input.first().json.content.parts[1].text;\n// تنظيف النص من أي علامات زائدة عشان يتحول لـ JSON\nconst cleanJson = response.replace(/```json/g, '').replace(/```/g, '').trim();\nconst data = JSON.parse(cleanJson);\n\nif (data.ignore === true) {\n  return [{ json: { ignore: true } }];\n}\n\n// تحويل كل معاملة لسطر منفصل عشان يترحلوا للجدول\nreturn data.rows.map(row => {\n  return {\n    json: {\n      ignore: false,\n      amount: row.amount,\n      type: row.type,\n      date: row.date,\n      time: row.time\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        -176
+      ],
+      "id": "fb014fe7-6850-433a-90f0-ce10cba1b848",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.photo[3].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -192,
+        128
+      ],
+      "id": "d7573f27-c5cf-4b3b-a388-c754509e88f1",
+      "name": "Get a file",
+      "webhookId": "49a8eb80-90b6-47a9-8620-7c4a405dbfb7",
+      "credentials": {
+        "telegramApi": {
+          "id": "1BjVVaOQpBtK1mTs",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.telegram.org/file/bot8390898021:AAFOZfW8yibjoI2G20fM_ddidRWogeZbCrs/{{ $node[\"Get a file\"].json.result.file_path }}\n",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data.jpeg"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        96,
+        128
+      ],
+      "id": "9e13d192-33f8-4998-a484-d9483aa3cc69",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.3-70b-versatile",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        464,
+        240
+      ],
+      "id": "65f27865-b0e6-41a0-9b27-e6065b1ae024",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "VIHUdLlgVVIoFQQo",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "text": "You are a strict document-analysis engine.\n\nAnalyze the attached invoice image in extreme detail.\nDo NOT guess, infer, estimate, or auto-complete any value.\n\nRules you MUST follow:\n1. Extract values ONLY if they are explicitly visible and readable in the image.\n2. Copy numbers, dates, times, and text EXACTLY as written (character by character).\n3. Do NOT replace values with common defaults (e.g. 100.00, 14:30, 2022-01-01).\n4. If a value is unclear, partially hidden, or not present → return null for that field.\n5. Do NOT translate numbers or rewrite formats.\n6. Currency values must match the invoice exactly (same digits, same currency).\n7. Date format must match the invoice format exactly (do not normalize).\n8. Time must be extracted only if a clear time is visible.\n9. The invoice type must be extracted as literal text from the document.\n\nBefore returning the final output:\n- Re-check every extracted value against the image.\n- Validate that the amount, date, and time truly appear in the invoice.\n\nReturn ONLY the structured output with these attributes:\n- amount\n- time\n- date\n- type\n\nNo explanations. No extra text.\nThe document language is Arabic. Extract Arabic text as-is without translation.",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "amount",
+              "description": "إجمالي المبلغ المطلوب دفعه",
+              "required": true
+            },
+            {
+              "name": "time",
+              "description": "وقت العملية بصيغة HH:MM:SS",
+              "required": true
+            },
+            {
+              "name": "type",
+              "description": "نوع الخدمة (مثل: فاتورة إنترنت منزلي)",
+              "required": true
+            },
+            {
+              "name": "data",
+              "description": "تاريخ العملية الموجود في الفاتورة",
+              "required": true
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "You are an expert extraction algorithm.\nOnly extract relevant information from the text.\nIf you do not know the value of an attribute asked to extract, you may omit the attribute's value.\nReturn ONLY a plain JSON object. No markdown, no backticks, no words before or after.."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        16
+      ],
+      "id": "debf894a-e1a3-4ca5-bdb9-1bf3100fba6b",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "text": "=\"Transcribe and analyze this voice content: {{ $json.result.file_path }} Follow the extraction logic for amount summation, relative dates, and semantic typing as defined in your instructions.\"",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "amount",
+              "type": "number",
+              "description": "إجمالي المبلغ المدفوع",
+              "required": true
+            },
+            {
+              "name": "time",
+              "description": "وقت العملية بصيغة HH:MM:SS",
+              "required": true
+            },
+            {
+              "name": "type",
+              "description": "نوع الخدمة ",
+              "required": true
+            },
+            {
+              "name": "data",
+              "description": "تاريخ العملية الموجودة",
+              "required": true
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "You are a strict voice transcription and semantic analysis engine.\n\nYour task:\n1. Transcribe the provided voice message accurately.\n2. Analyze the transcribed text deeply.\n3. Extract structured data with logical validation and controlled assumptions.\n\nGeneral rules (MANDATORY):\n- Do NOT hallucinate facts.\n- Do NOT invent numbers, dates, or events.\n- Any derived value must be logically justified from the voice content or metadata.\n- Prefer correctness over completeness.\n\n----------------------------------\nSTEP 1: TRANSCRIPTION\n----------------------------------\n- Transcribe the voice exactly as spoken.\n- Preserve spoken numbers as numbers (not words).\n- Ignore filler words unless they affect meaning.\n\n----------------------------------\nSTEP 2: SEMANTIC UNDERSTANDING\n----------------------------------\nUnderstand the intent, context, and scenario described in the voice:\n- Expense\n- Service\n- Event\n- Purchase\n- Activity\n- Other real-life action\n\n----------------------------------\nSTEP 3: DATA EXTRACTION LOGIC\n----------------------------------\n\n### AMOUNT (quantity / money):\n- Extract ALL numeric values related to amounts.\n- If multiple amounts are mentioned:\n  - Sum them ONLY if they belong to the same context.\n  - Example: \"500 هنا و1500 هناك\" → amount = 2000\n- Do NOT sum unrelated numbers.\n- If no amount is mentioned → amount = null\n\n### TIME:\n- If an explicit time is mentioned → extract it exactly.\n- If relative time is mentioned:\n  - Example: \"امبارح\" → calculate based on voice message timestamp.\n- If no time is mentioned:\n  - Use the voice message timestamp time (NOT the date).\n- Time must be in HH:MM format.\n\n### DATE:\n- If a date is explicitly mentioned → extract it exactly.\n- If relative date is mentioned:\n  - Example: \"امبارح\" → resolve it using the voice timestamp date.\n- If NO date is mentioned at all:\n  - Use the voice message timestamp DATE.\n- Date must be in YYYY-MM-DD format.\n\n### TYPE (service / activity type):\n- If explicitly mentioned → extract literal meaning.\n- If NOT mentioned:\n  - Infer a **generic and safe type** based on context.\n  - Examples:\n    - Birthday → \"Birthday Event\"\n    - Internet → \"Internet Service\"\n    - Food / outing → \"Personal Activity\"\n    - Transport → \"Transportation Service\"\n- Do NOT over-specify.\n\n----------------------------------\nSTEP 4: VALIDATION\n----------------------------------\nBefore returning output:\n- Re-check logical consistency.\n- Ensure amount aggregation is correct.\n- Ensure time/date fallback rules are correctly applied.\n- If any field is uncertain → return null instead of guessing.\n\n----------------------------------\nFINAL OUTPUT FORMAT (ONLY THIS):\n----------------------------------\nReturn ONLY a clean structured output:\n\namount: <number or null>\ntime: <HH:MM>\ndate: <YYYY-MM-DD>\ntype: <string>\n\nNo explanations.\nNo extra text.\nNo commentary."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1.2,
+      "position": [
+        384,
+        528
+      ],
+      "id": "23168967-9c0b-4ab0-be75-4380d262db44",
+      "name": "Information Extractor1"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        528
+      ],
+      "id": "c108a5b8-3097-4da7-b18b-e908eea75065",
+      "name": "Get a file1",
+      "webhookId": "a4c9ac96-f76b-4d50-8e13-2b5c72faa9db",
+      "credentials": {
+        "telegramApi": {
+          "id": "1BjVVaOQpBtK1mTs",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        464,
+        752
+      ],
+      "id": "3e227dc4-96bf-437a-8315-052b3f895285",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "JSflCWLPt67NR65X",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "About this workflow\nHow it works\nThis workflow acts as an automated financial assistant. It listens for new Voice Messages sent via a Telegram Bot. Once a message is received, it retrieves the audio file directly from Telegram's servers, uses Google Gemini AI to \"listen\" and extract transaction details (like amounts and descriptions), and then automatically calculates and logs the data into a Google Sheet.\n\nBy default: Calculations (like 500 + 1500) are handled by AI logic.\n\nOnce done: A new row is appended to your spreadsheet with the final total.\n\nFeatures\nSmart Audio Retrieval: Uses multi-step API calls to safely fetch .oga voice files.\n\nAI Financial Analysis: Powered by Gemini 1.5 Flash for high-accuracy speech-to-data conversion.\n\nMathematical Logic: Gemini can sum up multiple amounts mentioned in a single voice clip.\n\nStructured Output: Converts natural speech into clean JSON format for database entry.\n\nCustomize it!\nCurrency Support: Feel free to change the prompt to support EGP, USD, or SAR.\n\nCategorization: Customize the AI prompt to categorize expenses (e.g., Food, Transport).\n\nMulti-User: Filter incoming messages so only your Telegram ID can trigger the logging.\n\nExamples\nDaily Spending: \"I spent 500 on gas and 1500 on groceries\" → Logs 2000 in Google Sheets.\n\nBusiness Invoicing: Record client payments on the go just by speaking.\n\nInventory Tracking: Update stock levels via voice commands.",
+        "height": 928,
+        "width": 448,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1152,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "4aeda784-07cf-459a-a9c9-d92bf5f0378d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "Setup Guide\nTo get this workflow running, follow these steps:\n\nTelegram Bot Setup:\n\nCreate a bot via @BotFather on Telegram to get your API Token.\n\nConnect your bot to the Telegram Trigger node.\n\nAPI Credentials:\n\nGoogle Gemini: Obtain an API Key from Google AI Studio and connect it to the Google Gemini Chat Model node.\n\nGoogle Sheets: Connect your Google account and select the specific spreadsheet where you want to log your data.\n\nHTTP Configuration:\n\nEnsure the HTTP Request node is configured to download the file binary and name the output field as data so Gemini can access it.\n\nSpreadsheet Mapping:\n\nMap the outputs from Gemini (like amount, category, and date) to the corresponding columns in your Google Sheets node.",
+        "height": 528,
+        "width": 496
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -672,
+        304
+      ],
+      "typeVersion": 1,
+      "id": "7bde6026-6f8b-4b37-abf2-29226f7060c8",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a file1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file1": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "any"
+  },
+  "versionId": "f40073a0-fc96-4bc0-aeb5-209b198f5f9b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0ada0f9240cf3d697eea596678c688de141377a878804a540b165188e41b4b05"
+  },
+  "id": "EoIs33hpCF4EhLzs",
+  "tags": []
+}
