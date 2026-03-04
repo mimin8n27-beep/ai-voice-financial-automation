@@ -73,3 +73,7 @@ Eliminated manual financial logging
 Reduced human error by ~90%
 
 Enabled real-time expense tracking
+
+## Project Structure
+/docs        → Architecture diagrams, workflow screenshots, and sample outputs  
+/workflow    → Exported n8n automation workflow (JSON)
